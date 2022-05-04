@@ -1,0 +1,4 @@
+# Add regular expressions patterns to filter false positives.
+
+# Allow GUID
+("|')[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}("|')

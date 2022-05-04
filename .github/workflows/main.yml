@@ -1,19 +1,18 @@
 on: [push]
 
 jobs:
-  hello_world_job:
+  scan_run_logs:
     runs-on: ubuntu-latest
-    name: A job to say hello
+    name: Scan repo run logs
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Hello world action step
-        uses: ./ # Uses an action in the root directory
-        id: hello
+      - name: Scan run logs
+        uses: ./
+        id: scan
         with:
-          who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          repo: ${{ secrets.SCAN_REPO }}
+          run-limit: '50'
+      - name: Get scan exceptions
+        run: echo "${{ steps.scan.outputs.exceptions }}"

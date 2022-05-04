@@ -1,8 +1,13 @@
-# Container image that runs your code
-FROM alpine:3.10
+FROM ubuntu:jammy
+RUN apt-get update -y
+RUN apt-get install git gh make parallel jq -y
 
-# Copies your code file from your action repository to the filesystem path `/` of the container
-COPY entrypoint.sh /entrypoint.sh
+RUN git clone https://github.com/JosiahSiegel/git-secrets.git
+WORKDIR "/git-secrets"
+RUN make install
+COPY lib/* /
+COPY config/* /
+RUN mv /exclusions.txt /.gitallowed
+RUN ["chmod", "+x", "/patterns.sh"]
 
-# Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["sh", "/entrypoint.sh"]
+ENTRYPOINT ["bash", "/scan.sh"]

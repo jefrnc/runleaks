@@ -1,16 +1,27 @@
 # action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Scan Action Logs'
+description: 'Identify potential leaks in GitHub action logs'
+branding:
+  icon: 'search'  
+  color: 'red'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  github-token:
+    description: 'Token used to login to GitHub'
     required: true
-    default: 'World'
+  repo:
+    description: 'Repo to scan run logs for exceptions'
+    required: true
+  run-limit:
+    description: 'Limit on how many runs to scan'
+    required: true
+    default: '50'
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  exceptions:
+    description: 'json output of run logs with exceptions'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.who-to-greet }}
+    - ${{ inputs.github-token }}
+    - ${{ inputs.repo }}
+    - ${{ inputs.run-limit }}
