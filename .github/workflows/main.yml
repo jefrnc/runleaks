@@ -13,6 +13,14 @@ jobs:
         uses: ./
         id: scan
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.MY_TOKEN }}
+          repo:  ${{ secrets.SCAN_REPO }}
+          run-limit: 300
+          min-days-old: 7
+          max-days-old: 10
+          patterns-path: ".runleaks/patterns.txt"
+          exclusions-path: ".runleaks/exclusions.txt"
       - name: Get scan exceptions
-        run: echo "${{ steps.scan.outputs.exceptions }}"
+        run: |
+          echo "${{ steps.scan.outputs.exceptions }}"
+          echo "${{ steps.scan.outputs.exceptions }}" | jq length

@@ -16,6 +16,22 @@ inputs:
     description: 'Limit on how many runs to scan'
     required: false
     default: '50'
+  min-days-old:
+    description: 'Min age of runs in days'
+    required: false
+    default: '0'
+  max-days-old:
+    description: 'Max age of runs in days'
+    required: false
+    default: '3'
+  patterns-path:
+    description: 'Patterns file path'
+    required: false
+    default: ".runleaks/patterns.txt"
+  exclusions-path:
+    description: 'Excluded patterns file path'
+    required: false
+    default: ".runleaks/exclusions.txt"
 outputs:
   exceptions:
     description: 'json output of run logs with exceptions'
@@ -26,3 +42,7 @@ runs:
     - ${{ inputs.github-token }}
     - ${{ inputs.repo }}
     - ${{ inputs.run-limit }}
+    - ${{ inputs.patterns-path }}
+    - ${{ inputs.exclusions-path }}
+    - ${{ inputs.min-days-old }}
+    - ${{ inputs.max-days-old }}
