@@ -10,10 +10,11 @@ inputs:
     required: true
   repo:
     description: 'Repo to scan run logs for exceptions'
-    required: true
+    required: false
+    default: ${{ github.repository }}
   run-limit:
     description: 'Limit on how many runs to scan'
-    required: true
+    required: false
     default: '50'
 outputs:
   exceptions:

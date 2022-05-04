@@ -1,6 +1,6 @@
 # Scan Action Logs
 
-[![.github/workflows/main.yml](https://github.com/JosiahSiegel/scan-action-log/actions/workflows/main.yml/badge.svg)](https://github.com/JosiahSiegel/scan-action-log/actions/workflows/main.yml)
+[![Scan Action Logs](https://github.com/JosiahSiegel/scan-action-logs/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/JosiahSiegel/scan-action-logs/actions/workflows/main.yml)
 
 Leverage [git-secrets](https://github.com/awslabs/git-secrets) to identify potential leaks in GitHub action logs.
 
@@ -13,11 +13,9 @@ Leverage [git-secrets](https://github.com/awslabs/git-secrets) to identify poten
     description: 'Token used to login to GitHub'
     required: true
   repo:
-    description: 'Repo to scan run logs for exceptions'
-    required: true
+    description: 'Repo to scan run logs for exceptions. Defaults to current repo.'
   run-limit:
-    description: 'Limit on how many runs to scan'
-    required: true
+    description: 'Limit on how many runs to scan. Defaults to 50.'
     default: '50'
 ```
 
@@ -34,6 +32,18 @@ Leverage [git-secrets](https://github.com/awslabs/git-secrets) to identify poten
         id: scan
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get scan exceptions
+        run: echo "${{ steps.scan.outputs.exceptions }}"
+```
+
+or
+
+```yml
+      - name: Scan run logs
+        uses: josiahsiegel/scan-action-logs@v1
+        id: scan
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           repo: ${{ secrets.SCAN_REPO }}
           run-limit: '50'
       - name: Get scan exceptions
@@ -44,5 +54,5 @@ Leverage [git-secrets](https://github.com/awslabs/git-secrets) to identify poten
 
 ```sh
 docker build -t scan .
-docker run scan "<GITHUB PERSONAL ACCESS TOKEN>" "<REPO NAME>" "<RUN SCAN LIMIT>"
+docker run scan "<GITHUB PERSONAL ACCESS TOKEN>"
 ```

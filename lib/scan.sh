@@ -6,6 +6,13 @@ gh auth login --with-token < auth.txt
 # Register patterns
 /patterns.sh
 
+repo="$2"
+run_count=$3
+max_proc_count=4
+log_file=exceptions_search.txt
+
+echo "Repo: $2"
+echo "Run limit: $3"
 echo "============================================================================================"
 echo "Scan patterns:"
 echo "============================================================================================"
@@ -18,12 +25,6 @@ cat /.gitallowed
 echo "============================================================================================"
 echo "Output runs with exceptions found:"
 echo "============================================================================================"
-
-repo="$2"
-run_count=$3
-max_proc_count=4
-log_file=exceptions_search.txt
-
 
 # Collect ids of workflow runs
 declare -a run_ids=$(gh run list --repo "$repo" --limit $run_count --json databaseId,status --jq '.[] | select(.status =="completed").databaseId')

@@ -1,3 +1,5 @@
+name: Scan Action Logs
+
 on: [push]
 
 jobs:
@@ -12,7 +14,5 @@ jobs:
         id: scan
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          repo: ${{ secrets.SCAN_REPO }}
-          run-limit: '50'
       - name: Get scan exceptions
         run: echo "${{ steps.scan.outputs.exceptions }}"
