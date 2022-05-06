@@ -2,18 +2,18 @@
 
 # Register a secret provider
 --register-azure
-#--register-aws
+--register-aws
 
 ####################################################################
 
 # Add a prohibited pattern
---add '[A-Z0-9]{20}'
+--add [A-Z0-9]{20}
 
 ####################################################################
 
 # Add a string that is scanned for literally (+ is escaped):
---add --literal 'foo+bar'
---add --literal 'AccountKey'
---add --literal 'SharedAccessSignature'
+--add --literal foo+bar
+--add --literal AccountKey
+--add --literal SharedAccessSignature
 
 ####################################################################

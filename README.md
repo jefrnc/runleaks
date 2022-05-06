@@ -36,29 +36,48 @@ Leverages [git-secrets](https://github.com/awslabs/git-secrets) to identify pote
     description: 'Excluded patterns file path'
     required: false
     default: ".runleaks/exclusions.txt"
+  fail-on-leak:
+    description: 'Fail action if leak is found'
+    required: false
+    default: true
 ```
 
 ## Outputs
 ```yml
   exceptions:
-    description: 'json output of run logs with exceptions'
+    description: 'Json output of run logs with exceptions'
+  count:
+    description: 'Count of exceptions'
 ```
 
 ## Usage
+ * Note: [GitHub rate limits](#rate-limits)
 ```yml
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
         id: scan
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          patterns-path: ".runleaks/patterns.txt"
-          exclusions-path: ".runleaks/exclusions.txt"
+          fail-on-leak: false
       - name: Get scan exceptions
+        if: steps.scan.outputs.count > 0
         run: echo "${{ steps.scan.outputs.exceptions }}"
 ```
-
 or
-
+```yml
+      - name: Scan run logs
+        uses: josiahsiegel/runleaks@v1
+        id: scan
+        with:
+          github-token: ${{ secrets.MY_TOKEN }}
+          patterns-path: ".github/patterns.txt"
+          exclusions-path: ".github/exclusions.txt"
+          fail-on-leak: false
+      - name: Get scan exceptions
+        if: steps.scan.outputs.count > 0
+        run: echo "${{ steps.scan.outputs.exceptions }}"
+```
+or
 ```yml
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
@@ -67,12 +86,18 @@ or
           github-token: ${{ secrets.MY_TOKEN }}
           repo: 'me/my-repo'
           run-limit: 200
-          min-days-old: 2
-          max-days-old: 4
-          patterns-path: ".runleaks/patterns.txt"
-          exclusions-path: ".runleaks/exclusions.txt"
-      - name: Get scan exceptions
-        run: echo "${{ steps.scan.outputs.exceptions }}"
+          min-days-old: 0
+          max-days-old: 3
+          fail-on-leak: true
+```
+
+## Local testing
+  * Registers default patterns
+```sh
+git clone https://github.com/JosiahSiegel/runleaks.git
+cd runleaks/
+docker build -t runleaks .
+docker run scan "<PERSONAL_ACCESS_TOKEN>" "<REPO>" <RUN_LIMIT> <MIN_DAYS_OLD> <MAX_DAYS_OLD>
 ```
 
 ## Pattern file
@@ -88,15 +113,16 @@ or
 ####################################################################
 
 # Add a prohibited pattern
---add '[A-Z0-9]{20}'
+--add [A-Z0-9]{20}
 
 ####################################################################
 
 # Add a string that is scanned for literally (+ is escaped):
---add --literal 'foo+bar'
+--add --literal foo+bar
+--add --literal AccountKey
+--add --literal SharedAccessSignature
 
 ####################################################################
-
 ```
 
 ## Exclusion file
@@ -107,7 +133,7 @@ or
 # Add regular expressions patterns to filter false positives.
 
 # Allow GUID
-#("|')[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}("|')
+("|')[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}("|')
 
 ####################################################################
 ```

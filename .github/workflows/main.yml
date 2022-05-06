@@ -3,9 +3,25 @@ name: Scan Action Logs
 on: [push]
 
 jobs:
-  scan_run_logs:
+  scan_run_logs_1:
     runs-on: ubuntu-latest
-    name: Scan repo run logs
+    name: Scan repo run logs 1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Scan run logs
+        uses: ./
+        id: scan
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          fail-on-leak: false
+      - name: Get scan exceptions
+        if: steps.scan.outputs.count > 0
+        run: |
+          echo "${{ steps.scan.outputs.exceptions }}"
+  scan_run_logs_2:
+    runs-on: ubuntu-latest
+    name: Scan repo run logs 2
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -15,12 +31,26 @@ jobs:
         with:
           github-token: ${{ secrets.MY_TOKEN }}
           repo:  ${{ secrets.SCAN_REPO }}
-          run-limit: 300
-          min-days-old: 7
-          max-days-old: 10
           patterns-path: ".runleaks/patterns.txt"
           exclusions-path: ".runleaks/exclusions.txt"
+          fail-on-leak: false
       - name: Get scan exceptions
+        if: steps.scan.outputs.count > 0
         run: |
           echo "${{ steps.scan.outputs.exceptions }}"
-          echo "${{ steps.scan.outputs.exceptions }}" | jq length
+  scan_run_logs_3:
+    runs-on: ubuntu-latest
+    name: Scan repo run logs 3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Scan run logs
+        uses: ./
+        id: scan
+        with:
+          github-token: ${{ secrets.MY_TOKEN }}
+          repo:  ${{ secrets.SCAN_REPO }}
+          run-limit: 50
+          min-days-old: 0
+          max-days-old: 2
+          fail-on-leak: true

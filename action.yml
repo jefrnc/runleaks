@@ -1,5 +1,5 @@
 # action.yml
-name: 'Scan Action Logs'
+name: 'runleaks'
 description: 'Identify potential leaks in GitHub action logs'
 branding:
   icon: 'search'  
@@ -32,9 +32,15 @@ inputs:
     description: 'Excluded patterns file path'
     required: false
     default: ".runleaks/exclusions.txt"
+  fail-on-leak:
+    description: 'Fail action if leak is found'
+    required: false
+    default: true
 outputs:
   exceptions:
-    description: 'json output of run logs with exceptions'
+    description: 'Json output of run logs with exceptions'
+  count:
+    description: 'Count of exceptions'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -42,7 +48,8 @@ runs:
     - ${{ inputs.github-token }}
     - ${{ inputs.repo }}
     - ${{ inputs.run-limit }}
-    - ${{ inputs.patterns-path }}
-    - ${{ inputs.exclusions-path }}
     - ${{ inputs.min-days-old }}
     - ${{ inputs.max-days-old }}
+    - ${{ inputs.patterns-path }}
+    - ${{ inputs.exclusions-path }}
+    - ${{ inputs.fail-on-leak }}
