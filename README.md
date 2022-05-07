@@ -123,13 +123,13 @@ docker run scan "<PERSONAL_ACCESS_TOKEN>" "<REPO>" <RUN_LIMIT> <MIN_DAYS_OLD> <M
 
 # Add a prohibited pattern
 --add [A-Z0-9]{20}
+--add Account[k|K]ey
+--add Shared[a|A]ccessSignature
 
 ####################################################################
 
 # Add a string that is scanned for literally (+ is escaped):
 --add --literal foo+bar
---add --literal AccountKey
---add --literal SharedAccessSignature
 
 ####################################################################
 ```
@@ -149,9 +149,11 @@ docker run scan "<PERSONAL_ACCESS_TOKEN>" "<REPO>" <RUN_LIMIT> <MIN_DAYS_OLD> <M
 
 ## Performance
 
-Scan 50 runs = 1 min
+ * Scan 50 runs = 1 min
 
-Scan 500 runs = 8 mins
+ * Scan 500 runs = 8 mins
+
+* Scan 3000 runs = 50 mins
 
 ## Rate limits
 
