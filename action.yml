@@ -27,11 +27,11 @@ inputs:
   patterns-path:
     description: 'Patterns file path'
     required: false
-    default: ".runleaks/patterns.txt"
+    default: ".github/runleaks/patterns.txt"
   exclusions-path:
     description: 'Excluded patterns file path'
     required: false
-    default: ".runleaks/exclusions.txt"
+    default: ".github/runleaks/exclusions.txt"
   fail-on-leak:
     description: 'Fail action if leak is found'
     required: false

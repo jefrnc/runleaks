@@ -53,6 +53,8 @@ Leverages [git-secrets](https://github.com/awslabs/git-secrets) to identify pote
 ## Usage
  * Note: [GitHub rate limits](#rate-limits)
 ```yml
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
         id: scan
@@ -65,6 +67,8 @@ Leverages [git-secrets](https://github.com/awslabs/git-secrets) to identify pote
 ```
 or
 ```yml
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
         id: scan
@@ -79,6 +83,8 @@ or
 ```
 or
 ```yml
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
         id: scan
