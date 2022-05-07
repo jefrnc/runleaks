@@ -60,6 +60,7 @@ Leverages [git-secrets](https://github.com/awslabs/git-secrets) to identify pote
         id: scan
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          run-limit: 500
           fail-on-leak: false
       - name: Get scan exceptions
         if: steps.scan.outputs.count > 0
@@ -85,6 +86,8 @@ or
 ```yml
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          repository: 'me/my-repo'
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
         id: scan
@@ -93,7 +96,7 @@ or
           repo: 'me/my-repo'
           run-limit: 200
           min-days-old: 0
-          max-days-old: 3
+          max-days-old: 4
           fail-on-leak: true
 ```
 
