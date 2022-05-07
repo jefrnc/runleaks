@@ -1,0 +1,44 @@
+name: Scan Public Logs
+
+on: 
+  workflow_dispatch:
+    inputs:
+      repos:
+        description: 'Repos to scan:'
+        required: true
+        default: '[\"josiahsiegel\/runleaks\",\"josiahsiegel\/AzViz-action\"]'
+        type: string
+
+jobs:
+  pre_job:
+    name: "Set Build Environment"
+    runs-on: ubuntu-latest
+    outputs:
+      repos: ${{ env.REPOS }}
+    steps:
+      - name: Set matrix
+        id: set-matrix
+        run: echo "REPOS=${{ github.event.inputs.repos }}" >> $GITHUB_ENV
+
+  scan_public_logs:
+    runs-on: ubuntu-latest
+    name: Scan public logs
+    needs:
+       - pre_job
+    strategy:
+      matrix:
+        repo: ${{ fromJson(needs.pre_job.outputs.repos) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Scan run logs - ${{ matrix.repo }}
+        uses: ./
+        id: scan
+        with:
+          github-token: ${{ secrets.MY_TOKEN }}
+          repo:  ${{ matrix.repo }}
+          run-limit: 100
+          min-days-old: 1
+          max-days-old: 3
+          exclusions-path: ".runleaks/exclusions.txt"
+          fail-on-leak: true

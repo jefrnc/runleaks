@@ -37,6 +37,7 @@ if cp "$6" /patterns.txt; then
 else
   git secrets --register-azure --global
   git secrets --register-aws --global
+  git secrets --register-gcp --global
 fi
 
 cp "$7" /.gitallowed
