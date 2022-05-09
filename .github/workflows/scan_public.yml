@@ -10,6 +10,7 @@ on:
         type: string
   schedule:
     - cron: "10 * * * *" # Every hour at 10 minute mark
+  push:
 
 jobs:
   pre_job:
@@ -23,16 +24,17 @@ jobs:
         run: echo "REPOS=${{ github.event.inputs.repos }}" >> $GITHUB_ENV
 
       - name: Fetch random repo name
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || github.event_name == 'push'
         uses: JosiahSiegel/randomrepo@v1
         id: random
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.MY_TOKEN }}
 
       - name: Set schedule matrix
-        if: github.event_name == 'schedule'
+        if: github.event_name == 'schedule' || github.event_name == 'push'
         run: |
-          format_string=$(echo '[\"${{ steps.random.outputs.repo }}\"]' | sed 's/\//\\\//g')
+          format_string=$(echo "[\"${{ steps.random.outputs.repo }}\"]" | sed 's/\//\\\//g')
+          echo "REPOS='$format_string'"
           echo "REPOS=$format_string" >> $GITHUB_ENV
 
   scan_public_logs:
