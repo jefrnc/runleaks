@@ -8,6 +8,8 @@ on:
         required: true
         default: '[\"josiahsiegel\/runleaks\",\"josiahsiegel\/AzViz-action\"]'
         type: string
+  schedule:
+    - cron: "10 * * * *" # Every hour at 10 minute mark
 
 jobs:
   pre_job:
@@ -16,9 +18,22 @@ jobs:
     outputs:
       repos: ${{ env.REPOS }}
     steps:
-      - name: Set matrix
-        id: set-matrix
+      - name: Set workflow_dispatch matrix
+        if: github.event_name == 'workflow_dispatch'
         run: echo "REPOS=${{ github.event.inputs.repos }}" >> $GITHUB_ENV
+
+      - name: Fetch random repo name
+        if: github.event_name == 'schedule'
+        uses: JosiahSiegel/randomrepo-action@v1
+        id: random
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set schedule matrix
+        if: github.event_name == 'schedule'
+        run: |
+          format_string=$(echo '[\"${{ steps.random.outputs.repo }}\"]' | sed 's/\//\\\//g')
+          echo "REPOS=$format_string" >> $GITHUB_ENV
 
   scan_public_logs:
     runs-on: ubuntu-latest
