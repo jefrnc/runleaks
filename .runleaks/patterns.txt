@@ -3,6 +3,7 @@
 # Register a secret provider
 --register-azure
 --register-aws
+--register-gcp
 
 ####################################################################
 

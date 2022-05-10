@@ -117,6 +117,7 @@ docker run scan "<PERSONAL_ACCESS_TOKEN>" "<REPO>" <RUN_LIMIT> <MIN_DAYS_OLD> <M
 
 # Register a secret provider
 #--register-azure
+#--register-gcp
 --register-aws
 
 ####################################################################
