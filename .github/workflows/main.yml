@@ -27,7 +27,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: ${{ secrets.SCAN_REPO }}
-          ref: 'refs/heads/josiahsiegel/scan-action-logs'
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
         id: scan
@@ -49,7 +48,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: ${{ secrets.SCAN_REPO }}
-          ref: 'refs/heads/josiahsiegel/scan-action-logs'
       - name: Scan run logs
         uses: josiahsiegel/runleaks@v1
         id: scan
