@@ -20,5 +20,7 @@
 ("|')[A-Z0-9a-z[:punct:]]{32}("|')$
 # 88 length string
 ("|')[A-Z0-9a-z[:punct:]]{88}("|')$
+# Common storage credential
+.*-Amz-Credential=.*
 
 ####################################################################
