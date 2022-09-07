@@ -109,7 +109,7 @@ touch "$log_file"
       exit 1
     fi
     exception_with_detail=$(echo $exception | jq '. + {exception_detail: {'"$exception_line"'}}')
-    #echo $exception_with_detail >>"$log_file"
+    echo $exception_with_detail >>"$log_file"
   fi
 
 
