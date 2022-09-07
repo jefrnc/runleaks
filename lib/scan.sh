@@ -1,6 +1,7 @@
 #!/bin/bash
 
-
+ls
+printenv
 # Init
 repo="$2"
 run_count=$3
