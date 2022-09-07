@@ -83,6 +83,7 @@ run_for_each() {
     exit 1
   fi
 
+  echo "log_out -| $log_out"
   # Identify potential exceptions
   scan_out=$(echo "$log_out" | git secrets --scan - 2>&1)
   status=$?
@@ -90,8 +91,18 @@ run_for_each() {
   # If exception, add to array of details
   if (($status != 0)); then
     raw_log_full=$(echo "$scan_out" | grep '(standard input)')
+    
+    echo "scan_out -| $scan_out"
+    echo "raw_log_full -| $raw_log_full"
+    
     exception_line=$(echo "$raw_log_full" | awk -F '\t' '{print $1$2}' | sed 's/[^a-zA-Z0-9]/_/g' | sed 's/.*/"&",/')
+    
+    echo "exception_line -| $exception_line"
+    
+     
     exception=$(gh run view $each --repo "$repo" --json name,createdAt,databaseId,url,updatedAt,headBranch 2>/dev/null)
+    echo "exception -| $exception"
+    
     if [[ $? -ne 0 ]]; then
       exit 1
     fi
