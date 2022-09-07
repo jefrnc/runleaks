@@ -88,6 +88,8 @@ touch "$log_file"
   #echo "log_out -| $log_out"
   # Identify potential exceptions
   scan_out=$(git secrets --scan - 2>&1)
+
+  echo "scan_out | $scan_out"
   status=$?
 
   # If exception, add to array of details
