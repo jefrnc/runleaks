@@ -106,7 +106,9 @@ export log_file
 export repo
 
 parallel -0 --jobs $max_proc_count run_for_each ::: $run_ids_limited
-
+echo "--------------------"
+cat $log_file
+echo "--------------------"
 json_out=$(jq -n '.exceptions |= [inputs]' "$log_file")
 json_out_length=$(echo $json_out | jq -s '.[].exceptions' | jq length)
 echo "$json_out"
