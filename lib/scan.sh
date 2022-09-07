@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git config --global --add safe.directory /github/workspace
+
 # Init
 repo="$2"
 run_count=$3
