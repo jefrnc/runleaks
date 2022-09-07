@@ -113,7 +113,6 @@ touch "$log_file"
 
 
 # Make visible to subprocesses
-export -f run_for_each
 export log_file
 export repo
 
